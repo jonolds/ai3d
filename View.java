@@ -30,7 +30,6 @@ public class View extends JFrame implements ActionListener {
 		this.panel.addMouseListener(controller);
 		this.getContentPane().add(this.panel);
 		this.setVisible(true);
-		Thread.sleep(2000);
 	}
 	public void actionPerformed(ActionEvent evt) { repaint(); } // indirectly calls MyPanel.paintComponent
 
@@ -85,13 +84,13 @@ public class View extends JFrame implements ActionListener {
 			g.drawImage(img_flag_blue, (int)Model.XFLAG, (int)Model.YFLAG - FLAG_IMAGE_HEIGHT, null);
 			g.setColor(new Color(0, 0, 128));
 			g.drawRect((int)Model.XFLAG - 3, (int)Model.YFLAG - 25, 3, 32);
-			int energy = (int)(model.getSelfHealth() * 32.0f);
+			int energy = (int)(model.getScoreSelf() * 32.0f);
 			g.fillRect((int)Model.XFLAG - 2, (int)Model.YFLAG + 7 - energy, 2, energy);
 
 			g.drawImage(img_flag_red, (int)Model.XFLAG_OPPONENT,  (int)Model.YFLAG_OPPONENT - FLAG_IMAGE_HEIGHT, null);
 			g.setColor(new Color(128, 0, 0));
 			g.drawRect((int)Model.XFLAG_OPPONENT - 3, (int)Model.YFLAG_OPPONENT - 25, 3, 32);
-			energy = (int)(model.getOppoHealth() * 32.0f);
+			energy = (int)(model.getScoreOppo() * 32.0f);
 			g.fillRect((int)Model.XFLAG_OPPONENT - 2, (int)Model.YFLAG_OPPONENT + 7 - energy, 2, energy);
 		}
 
@@ -160,9 +159,9 @@ public class View extends JFrame implements ActionListener {
 		
 		void checkIfOver() {
 			model.setPerspectiveBlue(secret_symbol);
-			if(model.getSelfHealth() < 0.0f && model.getOppoHealth() >= 0.0f)
+			if(model.getScoreSelf() < 0.0f && model.getScoreOppo() >= 0.0f)
 				System.out.println("\nRed wins!");
-			else if(model.getOppoHealth() < 0.0f && model.getSelfHealth() >= 0.0f)
+			else if(model.getScoreOppo() < 0.0f && model.getScoreSelf() >= 0.0f)
 				System.out.println("\nBlue wins!");
 			else
 				System.out.println("\nTie.");

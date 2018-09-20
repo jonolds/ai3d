@@ -1,12 +1,14 @@
-class ReflexAgent implements IAgent {
+class ReflexAgent extends IAgent {
+	public void update(Model m) {
+		beFlagAttacker(m, 0);
+		beAggressor(m, 1);
+		beDefender(m, 2);
+	}
+}
+
+class IAgent {
 	int index; // a temporary value used to pass values around
-
-	ReflexAgent() {
-	}
-
-	public void reset() {
-	}
-
+	
 	public static float sq_dist(float x1, float y1, float x2, float y2) {
 		return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
 	}
@@ -77,6 +79,7 @@ class ReflexAgent implements IAgent {
 	void beFlagAttacker(Model m, int i) {
 		// Head for the opponent's flag
 		m.setDestination(i, Model.XFLAG_OPPONENT - Model.MAX_THROW_RADIUS + 1, Model.YFLAG_OPPONENT);
+
 		// Shoot at the flag if I can hit it
 		if(sq_dist(m.getX(i), m.getY(i), Model.XFLAG_OPPONENT, Model.YFLAG_OPPONENT) <= Model.MAX_THROW_RADIUS * Model.MAX_THROW_RADIUS) {
 			m.throwBomb(i, Model.XFLAG_OPPONENT, Model.YFLAG_OPPONENT);
@@ -121,10 +124,6 @@ class ReflexAgent implements IAgent {
 		}
 		avoidBombs(m, i);	// Try not to die
 	}
-
-	public void update(Model m) {
-		beFlagAttacker(m, 0);
-		beAggressor(m, 1);
-		beDefender(m, 2);
-	}
+	void reset() {};
+	void update(Model m) {};
 }

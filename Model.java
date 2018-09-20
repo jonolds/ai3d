@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 class Model {
-	static float speedFactor = 2.5f;
+	static float speedFactor = 4.0f;
 	//Constants affecting time
 	public static final float ENERGY_RECHARGE_RATE = 0.0005f; // The amount of energy given to each sprite each frame
 	public static final float REST_RECHARGE_BONUS = 0.002f; // The amount of extra recharge if you are not moving or throwing
@@ -158,8 +158,8 @@ class Model {
 
 	Controller getController() { return controller; }
 	long getTimeBalance() { return controller.getTimeBalance(secret_symbol, sprites_self == sprites_blue); }
-	float getSelfHealth() { return (sprites_self == sprites_blue ? energy_blue : energy_red); }
-	float getOppoHealth() { return (sprites_self == sprites_blue ? energy_red : energy_blue); }
+	float getScoreSelf() { return (sprites_self == sprites_blue ? energy_blue : energy_red); }
+	float getScoreOppo() { return (sprites_self == sprites_blue ? energy_red : energy_blue); }
 	int getSpriteCountSelf() { return sprites_self.size(); }
 	float getX(int sprite) { return sprites_self.get(sprite).x; }
 	float getY(int sprite) { return sprites_self.get(sprite).y; }
