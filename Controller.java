@@ -27,6 +27,20 @@ class Controller implements MouseListener {
 		new Timer(20, c.view).start(); // creates an ActionEvent at regular intervals, which is handled by View.actionPerformed
 	}
 	
+	static int doBattleNoGui(IAgent blue, IAgent red) throws Exception {
+		Object ss = new Object();
+		Controller c = new Controller(ss, blue, red);
+		c.init();
+		while(c.update()) { }
+		c.model.setPerspectiveBlue(c.secret_symbol);
+		if(c.model.getSelfHealth() < 0.0f && c.model.getOppoHealth() >= 0.0f)
+			return -1;
+		else if(c.model.getOppoHealth() < 0.0f && c.model.getSelfHealth() >= 0.0f)
+			return 1;
+		else
+			return 0;
+	}
+	
 	Controller(Object secret_symbol, IAgent blueAgent, IAgent redAgent) {
 		this.secret_symbol = secret_symbol;
 		this.selectedSprite = -1;
@@ -140,20 +154,6 @@ class Controller implements MouseListener {
 			if(mouseEvents.size() > 20) // discard events if the queue gets big
 				mouseEvents.remove();
 		}
-	}
-
-	static int doBattleNoGui(IAgent blue, IAgent red) throws Exception {
-		Object ss = new Object();
-		Controller c = new Controller(ss, blue, red);
-		c.init();
-		while(c.update()) { }
-		c.model.setPerspectiveBlue(c.secret_symbol);
-		if(c.model.getSelfHealth() < 0.0f && c.model.getOppoHealth() >= 0.0f)
-			return -1;
-		else if(c.model.getOppoHealth() < 0.0f && c.model.getSelfHealth() >= 0.0f)
-			return 1;
-		else
-			return 0;
 	}
 
 	String getBlueName() { return blueAgent.getClass().getName(); }

@@ -30,6 +30,7 @@ public class View extends JFrame implements ActionListener {
 		this.panel.addMouseListener(controller);
 		this.getContentPane().add(this.panel);
 		this.setVisible(true);
+		Thread.sleep(2000);
 	}
 	public void actionPerformed(ActionEvent evt) { repaint(); } // indirectly calls MyPanel.paintComponent
 
