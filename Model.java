@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 class Model {
-	static int timeX = 1;
+	static float speedFactor = 2.5f;
 	//Constants affecting time
+	public static final float ENERGY_RECHARGE_RATE = 0.0005f; // The amount of energy given to each sprite each frame
+	public static final float REST_RECHARGE_BONUS = 0.002f; // The amount of extra recharge if you are not moving or throwing
+	public static final float BROKEN_CRAWL_RATE = 0.3f; // The relative rate at which a broken robot can crawl back to its flag, then reassenble itself
+	public static final int BOMB_COOL_DOWN = (int)(40/speedFactor); // The number of frames a sprite must wait before throwing another bomb
 	
 	public static final float EPSILON = 0.0001f; // A small number
 	public static final float XMAX = 1200.0f - EPSILON; // The maximum horizontal screen position. (The minimum is 0.)
@@ -15,15 +19,12 @@ class Model {
 	public static final float YFLAG = 450.0f; // The vertical location of your flag
 	public static final float XFLAG_OPPONENT = XMAX - XFLAG; // The horizontal location of the opponent's flag
 	public static final float YFLAG_OPPONENT = YMAX - YFLAG; // The vertical location of the opponent's flag
-	public static final float ENERGY_RECHARGE_RATE = 0.0005f; // The amount of energy given to each sprite each frame
-	public static final float REST_RECHARGE_BONUS = 0.002f; // The amount of extra recharge if you are not moving or throwing
-	public static final float BROKEN_CRAWL_RATE = 0.3f; // The relative rate at which a broken robot can crawl back to its flag, then reassenble itself
 	public static final float BLAST_RADIUS = 48.0f; // The radius of the bomb's explosion
 	public static final float MAX_THROW_RADIUS = 200.0f; // The max distance a sprite can throw a bomb
 	public static final float BOMB_COST = 0.1f; // The energy cost to throw a bomb
 	public static final float BOMB_DAMAGE_TO_FLAG = 0.05f; // The amount of energy a detonating bomb takes from a flag within its blast radius
 	public static final float BOMB_DAMAGE_TO_SPRITE = 0.3f; // The amount of energy a detonating bomb takes from all sprites within the blast radius
-	public static final int BOMB_COOL_DOWN = 40; // The number of frames a sprite must wait before throwing another bomb
+	
 
 	private Controller controller;
 	private Object secret_symbol; // used to limit access to methods that agents could potentially use to cheat
@@ -152,7 +153,7 @@ class Model {
 				yy = 59 - yy;
 			}
 			int pos = 4 * (60 * yy + xx);
-			return Math.max(0.2f, Math.min(3.5f, -0.01f * (terrain[pos + 1] & 0xff) + 0.02f * (terrain[pos + 3] & 0xff)));
+			return speedFactor * Math.max(0.2f, Math.min(3.5f, -0.01f * (terrain[pos + 1] & 0xff) + 0.02f * (terrain[pos + 3] & 0xff)));
 	}
 
 	Controller getController() { return controller; }
@@ -309,7 +310,7 @@ class Model {
 
 		boolean update() {
 			prevPos = position;
-			position += 3.5;
+			position += (speedFactor * 3.5);
 			return position < distance + BLAST_RADIUS;
 		}
 

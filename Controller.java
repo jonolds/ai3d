@@ -5,10 +5,7 @@ import java.util.LinkedList;
 import javax.swing.Timer;
 
 class Controller implements MouseListener {
-	boolean gameStarted = false;
-	
 	public static final long MAX_ITERS = 18000; // The maximum length of a game in frames (At 20 frames/sec, 18000 frames takes 15 minutes)
-
 	private Model model; // holds all the game data
 	private View view; // the GUI
 	private Object secret_symbol; // used to prevent agents from accessing methods that they could use to cheat
@@ -22,20 +19,20 @@ class Controller implements MouseListener {
 	private long iter;
 	private boolean amIblue;
 
-	Controller(Object secret_symbol, IAgent blueAgent, IAgent redAgent) {
-		this.secret_symbol = secret_symbol;
-		this.selectedSprite = -1;
-		this.mouseEvents = new LinkedList<MouseEvent>();
-		this.blueAgent = blueAgent;
-		this.redAgent = redAgent;
-	}
-	
 	static void doBattle(IAgent blue, IAgent red) throws Exception {
 		Object ss = new Object();
 		Controller c = new Controller(ss, blue, red);
 		c.init();
 		c.view = new View(c, c.model, ss); // instantiates a JFrame, which spawns another thread to pump events and keeps the whole program running until the JFrame is closed
 		new Timer(20, c.view).start(); // creates an ActionEvent at regular intervals, which is handled by View.actionPerformed
+	}
+	
+	Controller(Object secret_symbol, IAgent blueAgent, IAgent redAgent) {
+		this.secret_symbol = secret_symbol;
+		this.selectedSprite = -1;
+		this.mouseEvents = new LinkedList<MouseEvent>();
+		this.blueAgent = blueAgent;
+		this.redAgent = redAgent;
 	}
 
 	private void init() throws Exception {

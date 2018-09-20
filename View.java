@@ -1,9 +1,11 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -14,7 +16,7 @@ public class View extends JFrame implements ActionListener {
 	Controller controller;
 	Model model;
 	private Object secret_symbol; // limits access to methods that agents could potentially use to cheat
-	private MyPanel panel;
+	public MyPanel panel;
 
 	public View(Controller c, Model m, Object symbol) throws Exception {
 		this.controller = c;
@@ -23,7 +25,7 @@ public class View extends JFrame implements ActionListener {
 		// Make the game window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("AI Tournament");
-		this.setSize(1203, 636);
+		this.setSize(new Dimension(1203, 636));
 		this.panel = new MyPanel();
 		this.panel.addMouseListener(controller);
 		this.getContentPane().add(this.panel);
@@ -34,6 +36,7 @@ public class View extends JFrame implements ActionListener {
 	class MyPanel extends JPanel {
 		public static final int FLAG_IMAGE_HEIGHT = 25;
 		Image img_bot_blue, img_bot_red, img_dead, img_flag_blue, img_flag_red;
+		BufferedImage bi;
 
 		MyPanel() throws Exception {
 			this.img_bot_blue = ImageIO.read(new File("robot_blue.png"));
@@ -51,17 +54,6 @@ public class View extends JFrame implements ActionListener {
 			drawFlags(g);
 			drawSprites(g);
 			drawBombs(g);
-		}
-		
-		void checkIfOver() {
-			model.setPerspectiveBlue(secret_symbol);
-			if(model.getSelfHealth() < 0.0f && model.getOppoHealth() >= 0.0f)
-				System.out.println("\nRed wins!");
-			else if(model.getOppoHealth() < 0.0f && model.getSelfHealth() >= 0.0f)
-				System.out.println("\nBlue wins!");
-			else
-				System.out.println("\nTie.");
-			View.this.dispatchEvent(new WindowEvent(View.this, WindowEvent.WINDOW_CLOSING));
 		}
 
 		private void drawTerrain(Graphics g) {
@@ -163,6 +155,17 @@ public class View extends JFrame implements ActionListener {
 				r = (int)Model.BLAST_RADIUS;
 				g.drawOval(x - r, y - r, 2 * r, 2 * r);
 			}
+		}
+		
+		void checkIfOver() {
+			model.setPerspectiveBlue(secret_symbol);
+			if(model.getSelfHealth() < 0.0f && model.getOppoHealth() >= 0.0f)
+				System.out.println("\nRed wins!");
+			else if(model.getOppoHealth() < 0.0f && model.getSelfHealth() >= 0.0f)
+				System.out.println("\nBlue wins!");
+			else
+				System.out.println("\nTie.");
+			View.this.dispatchEvent(new WindowEvent(View.this, WindowEvent.WINDOW_CLOSING));
 		}
 	}
 }
